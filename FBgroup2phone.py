@@ -10,38 +10,24 @@ class Post (object):
         self.post_content=post_content
 
         try:
-            
             self.poster_fid=re.search(r'\/ajax\/hovercard\/user.php\?id\=(\d*)\&amp',postinnerhtml).group(1)
-
         except:
-            
             self.poster_fid=None
             #print "error with fid, log saved"
-            
         try:
-            
             self.poster_name=re.search(r'alt="" aria-label="(.*)" role="img"',postinnerhtml).group(1)
-
         except:
-            
             self.poster_name=None
-           
             #print "error with name, log saved"
         try:
-            
             self.poster_phone=re.search(r'(961\d{7,8})|(\d{7,8})|(\d{2,3}[\\\/\.\-\_\s]{1,2}\d{6,8})|((\d{2,3}[\\\/\s\-\.]){2,4}\d{2,3})',self.post_content).group()
-
         except:
-            
             self.poster_phone=''
             postsfile=open ('C:/Users/Lozinsky/Desktop/pagesource.txt','a+')
             
             try:
-                
                 postsfile.write(self.post_content.encode('utf-8'))
-
             except:
-                
                 print 'couldnt write post content'
             postsfile.write('\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
             postsfile.close()
@@ -76,19 +62,19 @@ def to_csv (posts_array):
             csv_file.write(str(current_post)+'\n')
     csv_file.close()
 
+if __name__ == "__main__":
+    driver = webdriver.Chrome()
+    driver.get('http://facebook.com')
+    username=driver.find_element_by_css_selector('input#email.inputtext')#enter mail
+    username.send_keys('mail123')
+    passwd=driver.find_element_by_css_selector('input#pass.inputtext')
+    passwd.send_keys('<enterpass>') #enter pass
+    passwd.send_keys(Keys.RETURN)
+    driver.get('http://facebook.com/<enter group>') #enter group
+    scroll_down(driver)
+    posts=driver.find_elements_by_css_selector('div._5pcr.fbUserPost')
+    print 'len of posts= '+str(len(posts))
+    to_csv(posts)
 
-driver = webdriver.Chrome()
-driver.get('http://facebook.com')
-username=driver.find_element_by_css_selector('input#email.inputtext')#enter mail
-username.send_keys('mail123')
-passwd=driver.find_element_by_css_selector('input#pass.inputtext')
-passwd.send_keys('<enterpass>') #enter pass
-passwd.send_keys(Keys.RETURN)
-driver.get('http://facebook.com/<enter group>') #enter group
-scroll_down(driver)
-posts=driver.find_elements_by_css_selector('div._5pcr.fbUserPost')
-print 'len of posts= '+str(len(posts))
-to_csv(posts)
 
-
-print 'finished!'
+    print 'finished!'
